@@ -21,7 +21,7 @@ export const App: React.FC = () => {
   const [inputFocused, setInputFocused] = useState(false);
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  const applyQuery = useCallback(debounce(setAppliedQuery), []);
+  const applyQuery = useCallback(debounce(setAppliedQuery), [setAppliedQuery]);
 
   const handleSelection = (person: Person | null) => {
     setSelectedPerson(person);
@@ -35,7 +35,7 @@ export const App: React.FC = () => {
   const getFilteredPeople = useMemo(
     () =>
       [...peopleFromServer].filter(person =>
-        person.name.toLowerCase().includes(appliedQuery.toLowerCase()),
+        person.name.toLowerCase().includes(appliedQuery.trim().toLowerCase()),
       ),
     [appliedQuery],
   );
@@ -79,7 +79,6 @@ export const App: React.FC = () => {
                 onMouseDown={e => e.preventDefault()}
               >
                 <Autocomplete
-                  delay={300}
                   filteredPeople={getFilteredPeople}
                   onSelected={handleSelection}
                 />
